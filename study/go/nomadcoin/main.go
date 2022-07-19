@@ -2,18 +2,18 @@ package main
 
 import "fmt"
 
+type person struct {
+	name string
+	age  int
+}
+
+func (p person) sayHello() {
+	fmt.Printf("Hello! My name is %s and I'm %d", p.name, p.age)
+}
+
 func main() {
-	foods := [4]string{"potato", "pizza", "pasta"}
-	for _, i := range foods {
-		fmt.Println(i)
-	}
+	terry := person{"terry", 12}
 
-	slice := []string{"potato", "pizza", "pasta"}
+	terry.sayHello()
 
-	fmt.Printf("%v", slice)
-
-	slice = append(slice, "tomato")
-	fmt.Printf("%v", slice)
-	fmt.Println(len(foods))
-	fmt.Println(len(slice))
 }
