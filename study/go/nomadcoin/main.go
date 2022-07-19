@@ -2,18 +2,20 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/RokiLord/nomadcoin/blockchain"
+	"log"
+	"net/http"
 )
 
+const port string = ":4000"
+
+//response writer = data that wants to send to users
+func home(rw http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(rw, "Hello from Home!")
+}
+
 func main() {
-	chain := blockchain.GetBlockChain()
-	chain.AddBlock("Second Block")
-	chain.AddBlock("Thrid Block")
-	chain.AddBlock("Fourth Block")
-	for _, block := range chain.AllBlocks() {
-		fmt.Printf("Block Data: %s\n", block.Data)
-		fmt.Printf("Block Hash: %s\n", block.Hash)
-		fmt.Printf("Block PrevHash: %s\n", block.PrevHash)
-	}
+	http.HandleFunc("/", home)
+	fmt.Printf("Listening on http://localhost%s\n", port)
+	//error handling
+	log.Fatal(http.ListenAndServe(port, nil))
 }
