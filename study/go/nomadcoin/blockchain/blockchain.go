@@ -1,21 +1,59 @@
 package blockchain
 
+import (
+	"crypto/sha256"
+	"fmt"
+	"sync"
+)
+
 type block struct {
-	data     string
-	hash     string
-	prevHash string
+	Data     string
+	Hash     string
+	PrevHash string
 }
 
 type blockchain struct {
-	blocks []block
+	blocks []*block
 }
 
 var b *blockchain
+var once sync.Once
 
 func GetBlockChain() *blockchain {
 	if b == nil {
-		b = &blockchain{}
+		once.Do(func() {
+			b = &blockchain{}
+			b.AddBlock("Genensis Block")
+		})
 	}
 
 	return b
+}
+
+func (b *block) calculateHash() {
+	Hash := sha256.Sum256([]byte(b.Data + b.PrevHash))
+	b.Hash = fmt.Sprintf("%x", Hash)
+}
+
+func getLastHash() string {
+	totalBlocks := len(GetBlockChain().blocks)
+	if totalBlocks == 0 {
+		return ""
+	}
+
+	return GetBlockChain().blocks[totalBlocks-1].Hash
+}
+
+func createBlock(Data string) *block {
+	newBlock := block{Data, "", getLastHash()}
+	newBlock.calculateHash()
+	return &newBlock
+}
+
+func (b *blockchain) AddBlock(Data string) {
+	b.blocks = append(b.blocks, createBlock(Data))
+}
+
+func (b *blockchain) AllBlocks() []*block {
+	return b.blocks
 }
