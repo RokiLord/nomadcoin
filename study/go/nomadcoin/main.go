@@ -2,18 +2,15 @@ package main
 
 import "fmt"
 
-func plus(a ...int) int {
-	total := 0
-
-	for _, item := range a {
-		total += item
-	}
-
-	return total
-}
-
 func main() {
-	result := plus(2, 3, 4, 5, 2, 3, 45, 5, 21, 4, 1, 34)
+	x := 45245235235
 
-	fmt.Println(result)
+	fmt.Printf("%b\n", x)
+	fmt.Printf("%o\n", x)
+	fmt.Printf("%x\n", x)
+	fmt.Printf("%U\n", x)
+
+	xAsBinary := fmt.Sprintf("%b", x)
+	fmt.Println(xAsBinary)
+
 }
