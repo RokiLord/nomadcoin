@@ -1,4 +1,4 @@
-{{define "home"}}
+{{define "add"}}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,9 +6,9 @@
     <body>
         {{template "header"}}
     <main>
-    {{range .Blocks}}
-        {{template "block"}}
-    {{end}}
+        <form>
+            <input type="text" placeholder = "Data for your block" required />
+        </form>
     </main>
     {{template "footer"}}
 </body>
