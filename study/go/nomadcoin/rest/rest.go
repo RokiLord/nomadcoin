@@ -8,6 +8,7 @@ import (
 
 	"github.com/RokiLord/nomadcoin/blockchain"
 	"github.com/RokiLord/nomadcoin/utils"
+	"github.com/gorilla/mux"
 )
 
 var port string
@@ -78,12 +79,18 @@ func blocks(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func block(rw http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+}
+
 func Start(aPort int) {
-	handler := http.NewServeMux()
+	router := mux.NewRouter()
 	port = fmt.Sprintf(":%d", aPort)
-	handler.HandleFunc("/", documentation)
-	handler.HandleFunc("/blocks", blocks)
-	fmt.Printf("Listening on http://localhost%s", port)
-	log.Fatal(http.ListenAndServe(port, handler))
+	router.HandleFunc("/", documentation).Methods("GET")
+	router.HandleFunc("/blocks", blocks).Methods("GET", "POST")
+	router.HandleFunc("/blocks/{id:[0-9]+}", block).Methods("GET")
+	fmt.Printf("Listening on http://localhost%s\n", port)
+	log.Fatal(http.ListenAndServe(port, router))
 
 }
