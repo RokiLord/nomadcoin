@@ -77,7 +77,7 @@ func blocks(rw http.ResponseWriter, r *http.Request) {
 
 	case "POST":
 		var addBlockBody addBlockbody
-		utils.HandleFunc(json.NewDecoder(r.Body).Decode(&addBlockBody))
+		utils.HandleErr(json.NewDecoder(r.Body).Decode(&addBlockBody))
 		blockchain.GetBlockchain().AddBlock(addBlockBody.Message)
 		rw.WriteHeader(http.StatusCreated)
 	}
@@ -86,7 +86,7 @@ func blocks(rw http.ResponseWriter, r *http.Request) {
 func block(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["height"])
-	utils.HandleFunc(err)
+	utils.HandleErr(err)
 	block, err := blockchain.GetBlockchain().GetBlock(id)
 	encoder := json.NewEncoder(rw)
 
